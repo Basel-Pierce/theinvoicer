@@ -36,6 +36,7 @@ contract Invoicer is ReentrancyGuard, TRC721URIStorage {
         bool currentlyListed;
         uint createdAt;
         uint paidAt;
+        address paidBy;
     }
 
     event InvoiceListed (
@@ -52,8 +53,8 @@ contract Invoicer is ReentrancyGuard, TRC721URIStorage {
         address seller,
         uint256 amount,
         address token,
-        address payer,
-        uint paidAt
+        uint paidAt,
+        address paidBy
     );
 
     mapping(uint256 => ListedInvoice) private idToListedInvoice;
@@ -87,7 +88,8 @@ contract Invoicer is ReentrancyGuard, TRC721URIStorage {
         address dataToken,
         bool dataCurrentlyListed,
         uint dataCreatedAt,
-        uint dataPaidAt
+        uint dataPaidAt,
+        address dataPaidBy
     ) {
         ListedInvoice memory _listedInvoice = idToListedInvoice[invoiceId];
         dataInvoiceId = _listedInvoice.invoiceId;
@@ -97,6 +99,7 @@ contract Invoicer is ReentrancyGuard, TRC721URIStorage {
         dataCurrentlyListed = _listedInvoice.currentlyListed;
         dataCreatedAt =  _listedInvoice.createdAt;
         dataPaidAt = _listedInvoice.paidAt;
+        dataPaidBy = _listedInvoice.paidBy;
     }
 
     function createInvoice(string memory tokenURI, uint256 amount, address token) public payable nonReentrant returns (uint) {
@@ -123,7 +126,8 @@ contract Invoicer is ReentrancyGuard, TRC721URIStorage {
             token,
             true,
             dateNow,
-            0
+            0,
+            address(0)
         );
 
         _transfer(msg.sender, address(this), invoiceId);
@@ -184,6 +188,47 @@ contract Invoicer is ReentrancyGuard, TRC721URIStorage {
         return (_dataInvoiceId, _dataAmount, _dataToken, _dataCurrentlyListed, _dataCreatedAt, _dataPaidAt);
     }
 
+    function getPaidInvoices() public view returns (
+        uint256[] memory dataInvoiceId,
+        uint256[] memory dataAmount,
+        address[] memory dataToken,
+        uint[] memory dataCreatedAt,
+        uint[] memory dataPaidAt
+    ) {
+        uint totalItemCount = _invoiceIds.current();
+        uint itemCount = 0;
+        uint currentIndex = 0;
+        uint currentId;
+
+        for (uint i=0; i < totalItemCount; i++)
+        {
+            if (idToListedInvoice[i+1].paidBy == msg.sender) {
+                itemCount += 1;
+            }
+        }
+
+        uint256[] memory _dataInvoiceId = new uint256[](itemCount);
+        uint256[] memory _dataAmount = new uint256[](itemCount);
+        address[] memory _dataToken = new address[](itemCount);
+        uint[] memory _dataCreatedAt = new uint[](itemCount);
+        uint[] memory _dataPaidAt = new uint[](itemCount);
+
+        for (uint i=0; i < totalItemCount; i++) {
+            if (idToListedInvoice[i+1].seller == msg.sender) {
+                currentId = i+1;
+                ListedInvoice storage currentItem = idToListedInvoice[currentId];
+                _dataInvoiceId[currentIndex] = currentItem.invoiceId;
+                _dataAmount[currentIndex] = currentItem.amount;
+                _dataToken[currentIndex] = currentItem.token;
+                _dataCreatedAt[currentIndex] = currentItem.createdAt;
+                _dataPaidAt[currentIndex] = currentItem.paidAt;
+                currentIndex += 1;
+            }
+        }
+
+        return (_dataInvoiceId, _dataAmount, _dataToken, _dataCreatedAt, _dataPaidAt);
+    }
+
     function payInvoice(uint256 invoiceId, uint256 invoiceAmount) public payable nonReentrant {
         require(msg.value == payPrice, "You must pay the fee");
 
@@ -225,14 +270,15 @@ contract Invoicer is ReentrancyGuard, TRC721URIStorage {
 
         idToListedInvoice[invoiceId].currentlyListed = false;
         idToListedInvoice[invoiceId].paidAt = dateNow;
+        idToListedInvoice[invoiceId].paidBy = msg.sender;
 
         emit InvoicePaid(
             invoiceId,
             seller,
             amount,
             token,
-            msg.sender,
-            dateNow
+            dateNow,
+            msg.sender
         );
     }
 }
