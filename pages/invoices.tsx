@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import type { NextPage } from "next";
 // @ts-ignore
 import dateFormat from "dateformat";
@@ -8,16 +14,6 @@ import Top from "../components/top";
 import { TronWeb } from "../@types/tronweb";
 import Link from "next/link";
 import ActionPanel from "../components/actionPanel";
-
-const people = [
-  {
-    name: "1",
-    title: "10 MAY 2022",
-    email: "10 MAY 2022",
-    role: "500 USDT",
-  },
-  // More people...
-];
 
 interface CookedList {
   listed: boolean;
@@ -38,9 +34,14 @@ const Invoices: NextPage = () => {
   } = useTronlink();
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [cookedList, setCookedList] = useState<Array<CookedList>>();
+  const [cookedList, setCookedCreatedList] = useState<Array<CookedList>>();
+  const [cookedPaidList, setCookedPaidList] = useState<Array<CookedList>>();
 
-  const cooking = (invoices: any, tronWeb: TronWeb) => {
+  const cooking = (
+    invoices: any,
+    tronWeb: TronWeb,
+    setter: Dispatch<SetStateAction<CookedList[] | undefined>>
+  ) => {
     if (invoices.dataAmount.length === 0) {
       return false;
     }
@@ -49,9 +50,11 @@ const Invoices: NextPage = () => {
 
     const cookedList: CookedList[] = [];
 
-    invoices.dataCurrentlyListed.forEach((isListed: any, i: number) => {
+    invoices.dataInvoiceId.forEach((_: any, i: number) => {
       cookedList.push({
-        listed: isListed,
+        listed: invoices.hasOwnProperty("dataCurrentlyListed")
+          ? invoices.dataCurrentlyListed[i]
+          : false,
         amount:
           tronWeb.address.fromHex(invoices.dataToken[i]) ===
           process.env.NEXT_PUBLIC_USDT
@@ -73,7 +76,7 @@ const Invoices: NextPage = () => {
       });
     });
 
-    setCookedList(cookedList);
+    setter(cookedList);
   };
 
   const start = useCallback(async (isConnected: boolean, tronWeb?: TronWeb) => {
@@ -84,10 +87,14 @@ const Invoices: NextPage = () => {
     const InvoicerContract = await tronWeb
       ?.contract()
       .at(process.env.NEXT_PUBLIC_INVOICER);
-    const rawCreatedInvoices =
-      await InvoicerContract.getCreatedInvoices().call();
 
-    cooking(rawCreatedInvoices, tronWeb);
+    const [rawCreatedInvoices, rawPaidInvoices] = await Promise.all([
+      InvoicerContract.getCreatedInvoices().call(),
+      InvoicerContract.getPaidInvoices().call(),
+    ]);
+
+    cooking(rawCreatedInvoices, tronWeb, setCookedCreatedList);
+    cooking(rawPaidInvoices, tronWeb, setCookedPaidList);
   }, []);
 
   useEffect(() => {
@@ -166,33 +173,40 @@ const Invoices: NextPage = () => {
                             </tr>
                           </thead>
                           <tbody className="divide-y divide-gray-200">
-                            {people.map((person) => (
-                              <tr key={person.email}>
-                                <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 md:pl-0">
-                                  {person.name}
-                                </td>
-                                <td className="whitespace-nowrap py-4 px-3 text-sm text-gray-500">
-                                  {person.title}
-                                </td>
-                                <td className="whitespace-nowrap py-4 px-3 text-sm text-gray-500">
-                                  {person.email}
-                                </td>
-                                <td className="whitespace-nowrap py-4 px-3 text-sm text-gray-500">
-                                  {person.role}
-                                </td>
-                                <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 md:pr-0">
-                                  <a
-                                    href="#"
-                                    className="text-indigo-600 hover:text-indigo-900"
-                                  >
-                                    View Invoice
-                                    <span className="sr-only">
-                                      , {person.name}
-                                    </span>
-                                  </a>
-                                </td>
-                              </tr>
-                            ))}
+                            {cookedPaidList &&
+                              cookedPaidList
+                                .sort(function (a: CookedList, b: CookedList) {
+                                  return b.invoiceId - a.invoiceId;
+                                })
+                                .map((invoice) => (
+                                  <tr key={invoice.invoiceId}>
+                                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 md:pl-0">
+                                      {invoice.invoiceId}
+                                    </td>
+                                    <td className="whitespace-nowrap py-4 px-3 text-sm text-gray-500">
+                                      {invoice.createdAt.toString()}
+                                    </td>
+                                    <td className="whitespace-nowrap py-4 px-3 text-sm text-gray-500">
+                                      {invoice.paidAt!.toString()}
+                                    </td>
+                                    <td className="whitespace-nowrap py-4 px-3 text-sm text-gray-500">
+                                      {invoice.amount}{" "}
+                                      {invoice.token ===
+                                      process.env.NEXT_PUBLIC_USDT
+                                        ? "USDT"
+                                        : "USDD"}
+                                    </td>
+                                    <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 md:pr-0">
+                                      <Link
+                                        href={`/invoice/${invoice.invoiceId}`}
+                                      >
+                                        <a className="text-indigo-600 hover:text-indigo-900">
+                                          View Invoice
+                                        </a>
+                                      </Link>
+                                    </td>
+                                  </tr>
+                                ))}
                           </tbody>
                         </table>
                       </div>

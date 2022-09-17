@@ -214,7 +214,7 @@ contract Invoicer is ReentrancyGuard, TRC721URIStorage {
         uint[] memory _dataPaidAt = new uint[](itemCount);
 
         for (uint i=0; i < totalItemCount; i++) {
-            if (idToListedInvoice[i+1].seller == msg.sender) {
+            if (idToListedInvoice[i+1].paidBy == msg.sender) {
                 currentId = i+1;
                 ListedInvoice storage currentItem = idToListedInvoice[currentId];
                 _dataInvoiceId[currentIndex] = currentItem.invoiceId;
