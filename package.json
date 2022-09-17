@@ -1,0 +1,37 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@headlessui/react": "^1.7.0",
+    "@heroicons/react": "^2.0.10",
+    "@tailwindcss/forms": "^0.5.3",
+    "date-fns": "^2.29.2",
+    "dateformat": "^5.0.3",
+    "ethereum-unit-converter": "^0.0.17",
+    "html2canvas": "^1.4.1",
+    "next": "latest",
+    "rc-slider": "^10.0.1",
+    "react": "18.1.0",
+    "react-datepicker": "^4.8.0",
+    "react-dom": "18.1.0",
+    "react-textarea-autosize": "^8.3.4",
+    "react-toastify": "^9.0.8",
+    "use-react-screenshot": "^3.0.0",
+    "watermarkjs": "^2.1.1",
+    "web3.storage": "^4.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "17.0.35",
+    "@types/react": "18.0.9",
+    "@types/react-datepicker": "^4.4.2",
+    "@types/react-dom": "18.0.5",
+    "autoprefixer": "^10.4.7",
+    "postcss": "^8.4.14",
+    "tailwindcss": "^3.1.2",
+    "typescript": "4.7.2"
+  }
+}
