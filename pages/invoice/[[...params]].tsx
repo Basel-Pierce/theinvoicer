@@ -261,7 +261,6 @@ const Invoice: NextPage = () => {
 
   const start = useCallback(
     async (params: any, isConnected: boolean, tronWeb?: TronWeb) => {
-      console.log(typeof params, isConnected, tronWeb);
       if (typeof params === "undefined" || !isConnected || !tronWeb) {
         return false;
       }
@@ -330,10 +329,15 @@ const Invoice: NextPage = () => {
                             </div>
                           )}
                           {!done && (
-                            <LazyLoadImage effect="blur" src={invoiceImage} />
+                            <LazyLoadImage
+                              placeholderSrc="The image is still not available. Please wait..."
+                              effect="blur"
+                              src={invoiceImage}
+                            />
                           )}
                           {done && (
                             <LazyLoadImage
+                              placeholderSrc="The image is still not available. Please wait..."
                               effect="blur"
                               src={invoiceImage.replace("invoice", "paid")}
                             />
