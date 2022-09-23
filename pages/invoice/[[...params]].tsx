@@ -3,6 +3,8 @@ import { useRouter } from "next/router";
 // @ts-ignore
 import dateFormat from "dateformat";
 import { toast } from "react-toastify";
+// @ts-ignore
+import { LazyLoadImage } from "react-lazy-load-image-component";
 import Sidebar from "../../components/sidebar";
 import Top from "../../components/top";
 import { useTronlink } from "../../hooks";
@@ -11,6 +13,8 @@ import ActionPanel from "../../components/actionPanel";
 import { TronWeb } from "../../@types/tronweb";
 import Spinner from "../../components/spinner";
 
+import "react-lazy-load-image-component/src/effects/blur.css";
+
 interface CookedList {
   listed: boolean;
   amount: number;
@@ -18,6 +22,8 @@ interface CookedList {
   invoiceId: number;
   paidAt?: Date;
   token: string;
+  seller: string;
+  paidBy?: string;
 }
 
 const Invoice: NextPage = () => {
@@ -248,6 +254,8 @@ const Invoice: NextPage = () => {
             )
           : undefined,
       token: tronWeb.address.fromHex(invoice.dataToken),
+      seller: tronWeb.address.fromHex(invoice.dataSeller),
+      paidBy: tronWeb.address.fromHex(invoice.dataPaidBy),
     });
   };
 
@@ -320,26 +328,41 @@ const Invoice: NextPage = () => {
                               </div>
                             </div>
                           )}
-                          {!done && <img src={invoiceImage} />}
+                          {!done && (
+                            <LazyLoadImage effect="blur" src={invoiceImage} />
+                          )}
                           {done && (
-                            <img
+                            <LazyLoadImage
+                              effect="blur"
                               src={invoiceImage.replace("invoice", "paid")}
                             />
                           )}
-                          {invoiceInfo && invoiceInfo.listed && !done && (
+                          {invoiceInfo &&
+                            invoiceInfo.listed &&
+                            !done &&
+                            address !== invoiceInfo.seller && (
+                              <div className="flex justify-center">
+                                <div className="text-center">
+                                  <p className="text-gray-500 text-sm mt-4">
+                                    (You will sign two transactions)
+                                  </p>
+                                  <button
+                                    onClick={pay}
+                                    type="button"
+                                    disabled={working}
+                                    className="mt-4 inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
+                                  >
+                                    Pay Invoice
+                                  </button>
+                                </div>
+                              </div>
+                            )}
+                          {invoiceInfo && !invoiceInfo.listed && (
                             <div className="flex justify-center">
                               <div className="text-center">
                                 <p className="text-gray-500 text-sm mt-4">
-                                  (You will sign two transactions)
+                                  Paid by <strong>{invoiceInfo.paidBy}</strong>
                                 </p>
-                                <button
-                                  onClick={pay}
-                                  type="button"
-                                  disabled={working}
-                                  className="mt-4 inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
-                                >
-                                  Pay Invoice
-                                </button>
                               </div>
                             </div>
                           )}
