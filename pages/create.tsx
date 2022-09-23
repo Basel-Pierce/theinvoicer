@@ -835,7 +835,8 @@ const Create: FC<Props> = ({ data, onChange }) => {
                       <div className="mt-2 max-w-xl text-sm text-gray-500">
                         <p>
                           Share this link to your client to pay for your
-                          services: {link}
+                          services: {process.env.NEXT_PUBLIC_ABSOLUTE_URL}
+                          {link}
                         </p>
                       </div>
                       <div className="mt-3 text-sm">
