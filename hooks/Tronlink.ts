@@ -108,10 +108,10 @@ export const useTronlink = (): IReturnInteface => {
 
   useEffect(() => {
     connectToWallet();
-    return () => {
-      window.removeEventListener("load", connectToWallet);
-      window.removeEventListener("message", processConnection);
-    };
+    // return () => {
+    //   window.removeEventListener("load", connectToWallet);
+    //   window.removeEventListener("message", processConnection);
+    // };
   }, []);
 
   return {
