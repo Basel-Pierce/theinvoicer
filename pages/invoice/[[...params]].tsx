@@ -261,6 +261,7 @@ const Invoice: NextPage = () => {
 
   const start = useCallback(
     async (params: any, isConnected: boolean, tronWeb?: TronWeb) => {
+      console.log(typeof params, isConnected, tronWeb);
       if (typeof params === "undefined" || !isConnected || !tronWeb) {
         return false;
       }
