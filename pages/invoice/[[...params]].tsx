@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 // @ts-ignore
 import dateFormat from "dateformat";
 import { toast } from "react-toastify";
+import { InformationCircleIcon } from "@heroicons/react/20/solid";
 // @ts-ignore
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import Sidebar from "../../components/sidebar";
@@ -18,6 +19,7 @@ import "react-lazy-load-image-component/src/effects/blur.css";
 interface CookedList {
   listed: boolean;
   amount: number;
+  humanAmount: number;
   createdAt: Date;
   invoiceId: number;
   paidAt?: Date;
@@ -38,8 +40,10 @@ const Invoice: NextPage = () => {
   const router = useRouter();
   const { params } = router.query;
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [detailsOpen, setDetailsOpen] = useState(false);
   const [invoiceImage, setInvoiceImage] = useState<string>();
   const [invoiceInfo, setInvoiceInfo] = useState<CookedList>();
+  const [error, setError] = useState(false);
   const [working, setWorking] = useState(false);
   const [done, setDone] = useState<boolean>(false);
 
@@ -60,18 +64,11 @@ const Invoice: NextPage = () => {
       tronWeb?.contract().at(addressToken),
     ]);
 
-    // TODO descomment this
-    const rawPayPrice = 1000000;
-    const [rawBalanceOf, tokenAllowance /*, rawPayPrice */] = await Promise.all(
-      [
-        TokenContract.balanceOf(address).call(),
-        TokenContract.allowance(
-          address,
-          process.env.NEXT_PUBLIC_INVOICER
-        ).call(),
-        // InvoicerContract.getPayPrice().call(),
-      ]
-    );
+    const [rawBalanceOf, tokenAllowance, rawPayPrice] = await Promise.all([
+      TokenContract.balanceOf(address).call(),
+      TokenContract.allowance(address, process.env.NEXT_PUBLIC_INVOICER).call(),
+      InvoicerContract.getPayPrice().call(),
+    ]);
 
     const enoughBalance =
       Number(convert(process.env.NEXT_PUBLIC_PAY_INVOICE_COST, "mwei").wei) +
@@ -203,19 +200,20 @@ const Invoice: NextPage = () => {
         return false;
       }
 
-      toast.success("You paid the Invoice!", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-      });
+      // toast.success("You paid the Invoice!", {
+      //   position: "top-right",
+      //   autoClose: 5000,
+      //   hideProgressBar: true,
+      //   closeOnClick: true,
+      //   pauseOnHover: true,
+      //   draggable: true,
+      //   progress: undefined,
+      //   theme: "dark",
+      // });
 
       setWorking(false);
       setDone(true);
+      router.reload();
     } catch (e) {
       console.log(e);
       toast.error("Something wrong happened", {
@@ -238,9 +236,16 @@ const Invoice: NextPage = () => {
       return false;
     }
 
+    const convert = require("ethereum-unit-converter");
+
     setInvoiceInfo({
       listed: invoice.dataCurrentlyListed,
       amount: Number(invoice.dataAmount.toString()),
+      humanAmount:
+        tronWeb.address.fromHex(invoice.dataToken) ===
+        process.env.NEXT_PUBLIC_USDT
+          ? convert(Number(invoice.dataAmount.toString()), "wei").mwei
+          : convert(Number(invoice.dataAmount.toString()), "wei").ether,
       createdAt: dateFormat(
         new Date(Number(invoice.dataCreatedAt.toString()) * 1000),
         "d mmm yyyy"
@@ -281,15 +286,19 @@ const Invoice: NextPage = () => {
         "https://nftstorage.link/ipfs/"
       );
 
-      const metadataResponse = await fetch(tokenURI);
-      const metadata = await metadataResponse.json();
+      try {
+        const metadataResponse = await fetch(tokenURI);
+        const metadata = await metadataResponse.json();
 
-      const image = metadata.image.replace(
-        "ipfs://",
-        "https://nftstorage.link/ipfs/"
-      );
+        const image = metadata.image.replace(
+          "ipfs://",
+          "https://nftstorage.link/ipfs/"
+        );
 
-      setInvoiceImage(image);
+        setInvoiceImage(image);
+      } catch (e) {
+        setError(true);
+      }
     },
     []
   );
@@ -317,52 +326,125 @@ const Invoice: NextPage = () => {
                 params.length === 1 && (
                   <>
                     <div>
-                      {invoiceImage && invoiceInfo && (
+                      {invoiceInfo && (
+                        <div className="rounded-md bg-blue-50 p-4 mb-6">
+                          <div className="flex">
+                            <div className="flex-shrink-0">
+                              <InformationCircleIcon
+                                className="h-5 w-5 text-blue-400"
+                                aria-hidden="true"
+                              />
+                            </div>
+                            <div className="ml-3 flex-1 md:flex md:justify-between">
+                              <p className="text-sm text-blue-700">
+                                If the Invoice is not displayed, you can view
+                                the data clicking on Details. The Invoice NFT
+                                usually takes a few seconds to be processed and
+                                displayed.
+                              </p>
+                              <p className="mt-3 text-sm md:mt-0 md:ml-6">
+                                <button
+                                  onClick={() => {
+                                    setDetailsOpen(!detailsOpen);
+                                  }}
+                                  className="whitespace-nowrap font-medium text-blue-700 hover:text-blue-600"
+                                >
+                                  Details
+                                  <span aria-hidden="true"> &rarr;</span>
+                                </button>
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                      {detailsOpen && invoiceInfo && (
+                        <div className="overflow-hidden bg-white shadow sm:rounded-lg mb-6">
+                          <div className="px-4 py-5 sm:px-6">
+                            <h3 className="text-lg font-medium leading-6 text-gray-900">
+                              Invoice
+                            </h3>
+                          </div>
+                          <div className="border-t border-gray-200 px-4 py-5 sm:p-0">
+                            <dl className="sm:divide-y sm:divide-gray-200">
+                              <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
+                                <dt className="text-sm font-medium text-gray-500">
+                                  Status
+                                </dt>
+                                <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                                  <span
+                                    className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${
+                                      invoiceInfo.listed
+                                        ? "bg-red-100 text-red-800"
+                                        : "bg-green-100 text-green-800"
+                                    }`}
+                                  >
+                                    {invoiceInfo.listed ? "Not Paid" : "Paid"}
+                                  </span>
+                                </dd>
+                              </div>
+                              <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
+                                <dt className="text-sm font-medium text-gray-500">
+                                  Amount
+                                </dt>
+                                <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                                  {invoiceInfo.humanAmount}{" "}
+                                  {invoiceInfo.token ===
+                                  process.env.NEXT_PUBLIC_USDT
+                                    ? "USDT"
+                                    : "USDD"}
+                                </dd>
+                              </div>
+                              {!invoiceInfo.listed && (
+                                <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
+                                  <dt className="text-sm font-medium text-gray-500">
+                                    Paid By
+                                  </dt>
+                                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                                    {invoiceInfo.paidBy}
+                                  </dd>
+                                </div>
+                              )}
+                              {!invoiceInfo.listed && (
+                                <div className="py-4 sm:grid sm:grid-cols-3 sm:gap-4 sm:py-5 sm:px-6">
+                                  <dt className="text-sm font-medium text-gray-500">
+                                    Paid At
+                                  </dt>
+                                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-2 sm:mt-0">
+                                    {invoiceInfo.paidAt!.toString()}
+                                  </dd>
+                                </div>
+                              )}
+                            </dl>
+                          </div>
+                        </div>
+                      )}
+                      {invoiceImage && invoiceInfo && !error && (
                         <div className="relative">
                           {working && (
                             <div className="absolute top-0 w-full h-full z-50 bg-white/90">
                               <div className="w-full h-full relative">
                                 <div className="flex justify-center items-center absolute inset-0">
-                                  <Spinner styles="h-10 w-10 text-black" />
+                                  <Spinner styles="h-6 w-6 text-black" />
                                 </div>
                               </div>
                             </div>
                           )}
+
                           {!done && (
                             <LazyLoadImage
-                              placeholderSrc="The image is still not available. Please wait..."
                               effect="blur"
                               src={invoiceImage}
+                              className="mb-4"
                             />
                           )}
                           {done && (
                             <LazyLoadImage
-                              placeholderSrc="The image is still not available. Please wait..."
                               effect="blur"
                               src={invoiceImage.replace("invoice", "paid")}
+                              className="mb-4"
                             />
                           )}
-                          {invoiceInfo &&
-                            invoiceInfo.listed &&
-                            !done &&
-                            address !== invoiceInfo.seller && (
-                              <div className="flex justify-center">
-                                <div className="text-center">
-                                  <p className="text-gray-500 text-sm mt-4">
-                                    (You will sign two transactions)
-                                  </p>
-                                  <button
-                                    onClick={pay}
-                                    type="button"
-                                    disabled={working}
-                                    className="mt-4 inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
-                                  >
-                                    Pay Invoice
-                                  </button>
-                                </div>
-                              </div>
-                            )}
-                          {invoiceInfo && !invoiceInfo.listed && (
+                          {/* {invoiceInfo && !invoiceInfo.listed && (
                             <div className="flex justify-center">
                               <div className="text-center">
                                 <p className="text-gray-500 text-sm mt-4">
@@ -370,17 +452,34 @@ const Invoice: NextPage = () => {
                                 </p>
                               </div>
                             </div>
-                          )}
+                          )} */}
                         </div>
                       )}
-                      {!invoiceImage && (
+                      {!invoiceImage && !error && (
                         <div className="flex justify-center items-center">
-                          <Spinner styles="h-10 w-10 text-black" />
-                          <p className="text-gray-800 text-lg ml-3 font-semibold">
+                          <Spinner styles="h-6 w-6 text-black" />
+                          <p className="text-gray-800 text-base ml-3">
                             Loading Invoice...
                           </p>
                         </div>
                       )}
+                      {invoiceInfo &&
+                        invoiceInfo.listed &&
+                        !done &&
+                        address !== invoiceInfo.seller && (
+                          <div className="flex justify-center">
+                            <div className="text-center">
+                              <button
+                                onClick={pay}
+                                type="button"
+                                disabled={working}
+                                className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50"
+                              >
+                                Pay Invoice
+                              </button>
+                            </div>
+                          </div>
+                        )}
                     </div>
                   </>
                 )}

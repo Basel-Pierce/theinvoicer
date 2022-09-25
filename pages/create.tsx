@@ -4,6 +4,9 @@ import format from "date-fns/format";
 // @ts-ignore
 import { useScreenshot } from "use-react-screenshot";
 import { Web3Storage, File } from "web3.storage";
+// @ts-ignore
+import { CopyToClipboard } from "react-copy-to-clipboard";
+import QRCode from "react-qr-code";
 import { toast } from "react-toastify";
 import { useTronlink } from "../hooks";
 import Sidebar from "../components/sidebar";
@@ -57,6 +60,7 @@ const Create: FC<Props> = ({ data, onChange }) => {
   const [disabled, setDisabled] = useState<boolean>(false);
   const [done, setDone] = useState<boolean>(false);
   const [link, setLink] = useState<string>();
+  const [showQR, setShowQR] = useState<boolean>(false);
 
   const dateFormat = "MMM dd, yyyy";
   const invoiceDate =
@@ -371,7 +375,28 @@ const Create: FC<Props> = ({ data, onChange }) => {
   }, [onChange, invoice]);
 
   return (
-    <div>
+    <div className="relative">
+      {showQR && (
+        <div
+          className="absolute top-0 w-full h-full z-50 bg-white/90"
+          onClick={() => {
+            setShowQR(false);
+          }}
+        >
+          <div className="w-full h-full relative">
+            <div className="flex justify-center items-center absolute inset-0">
+              <QRCode
+                value={
+                  isConnected && done && link
+                    ? `${process.env.NEXT_PUBLIC_ABSOLUTE_URL}${link}`
+                    : ""
+                }
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
       <div className="md:pl-64">
@@ -398,10 +423,9 @@ const Create: FC<Props> = ({ data, onChange }) => {
                       <div className="absolute top-0 w-full h-full z-50 bg-white/90">
                         <div className="w-full h-full relative">
                           <div className="flex justify-center items-center absolute inset-0">
-                            <Spinner styles="h-10 w-10 text-black" />
-                            <p className="text-gray-800 text-lg ml-3 font-semibold">
-                              Generating invoice (be aware of the TronLink modal
-                              to sign the transaction)
+                            <Spinner styles="h-6 w-6 text-black" />
+                            <p className="text-gray-800 text-base ml-3">
+                              Creating invoice, please be patient
                             </p>
                           </div>
                         </div>
@@ -825,7 +849,7 @@ const Create: FC<Props> = ({ data, onChange }) => {
                 </div>
               )}
 
-              {isConnected && done && link && (
+              {isConnected && done && link && true && (
                 <>
                   <div className="bg-white shadow sm:rounded-lg">
                     <div className="px-4 py-5 sm:p-6">
@@ -834,9 +858,34 @@ const Create: FC<Props> = ({ data, onChange }) => {
                       </h3>
                       <div className="mt-2 max-w-xl text-sm text-gray-500">
                         <p>
-                          Share this link to your client to pay for your
-                          services: {process.env.NEXT_PUBLIC_ABSOLUTE_URL}
-                          {link}
+                          <CopyToClipboard
+                            text={`${process.env.NEXT_PUBLIC_ABSOLUTE_URL}${link}`}
+                            onCopy={() =>
+                              toast.success("Copied", {
+                                position: "top-right",
+                                autoClose: 2000,
+                                theme: "dark",
+                              })
+                            }
+                          >
+                            <button
+                              type="button"
+                              className="inline-flex items-center rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                            >
+                              Copy the link to clipboard
+                            </button>
+                          </CopyToClipboard>
+                        </p>
+                        <p className="mt-2">
+                          <button
+                            onClick={() => {
+                              setShowQR(true);
+                            }}
+                            type="button"
+                            className="inline-flex items-center rounded border border-gray-300 bg-white px-2.5 py-1.5 text-xs font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                          >
+                            Generate QR code
+                          </button>
                         </p>
                       </div>
                       <div className="mt-3 text-sm">

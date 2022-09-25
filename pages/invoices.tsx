@@ -181,7 +181,13 @@ const Invoices: NextPage = () => {
                                 .map((invoice) => (
                                   <tr key={invoice.invoiceId}>
                                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 md:pl-0">
-                                      {invoice.invoiceId}
+                                      <a
+                                        href={`${process.env.NEXT_PUBLIC_EXPLORER_URL}token721/${process.env.NEXT_PUBLIC_INVOICER}/${invoice.invoiceId}`}
+                                        target="_blank"
+                                        className="text-indigo-600 hover:text-indigo-900"
+                                      >
+                                        {invoice.invoiceId}
+                                      </a>
                                     </td>
                                     <td className="whitespace-nowrap py-4 px-3 text-sm text-gray-500">
                                       {invoice.createdAt.toString()}
@@ -294,7 +300,13 @@ const Invoices: NextPage = () => {
                                 .map((invoice) => (
                                   <tr key={invoice.invoiceId}>
                                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 md:pl-0">
-                                      {invoice.invoiceId}
+                                      <a
+                                        href={`${process.env.NEXT_PUBLIC_EXPLORER_URL}token721/${process.env.NEXT_PUBLIC_INVOICER}/${invoice.invoiceId}`}
+                                        target="_blank"
+                                        className="text-indigo-600 hover:text-indigo-900"
+                                      >
+                                        {invoice.invoiceId}
+                                      </a>
                                     </td>
                                     <td className="whitespace-nowrap py-4 px-3 text-sm text-gray-500">
                                       {invoice.createdAt.toString()}
