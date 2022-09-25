@@ -7,7 +7,7 @@ import {
 
 export const navigation = [
   { name: "Create", href: "/create", icon: DocumentPlusIcon, current: false },
-  { name: "Scan and Pay", href: "/pay", icon: QrCodeIcon, current: false },
+  // { name: "Scan and Pay", href: "/pay", icon: QrCodeIcon, current: false },
   {
     name: "Invoices",
     href: "/invoices",
