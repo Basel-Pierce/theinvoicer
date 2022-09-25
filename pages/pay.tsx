@@ -40,14 +40,15 @@ const Pay: FC<Props> = ({ data, onChange }) => {
               <QrReader
                 onResult={(result, error) => {
                   if (!!result) {
-                    router.push(result?.text);
+                    router.push(result.getText());
                   }
 
                   if (!!error) {
                     console.log(error);
                   }
                 }}
-                style={{ width: "100%" }}
+                className="w-full"
+                constraints={{}}
               />
               {!isConnected && <ActionPanel />}
             </div>
