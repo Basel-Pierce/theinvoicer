@@ -2,6 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+    background-color: white;
+}
+
+body {
+    background-color: white;
+}
+
 .row {
     position: relative;
     border-bottom: 1px solid #e3e3e3

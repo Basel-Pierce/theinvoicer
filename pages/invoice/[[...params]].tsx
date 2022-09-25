@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 // @ts-ignore
 import dateFormat from "dateformat";
 import { toast } from "react-toastify";
+import QRCode from "react-qr-code";
 import { InformationCircleIcon } from "@heroicons/react/20/solid";
 // @ts-ignore
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -274,29 +275,44 @@ const Invoice: NextPage = () => {
         ?.contract()
         .at(process.env.NEXT_PUBLIC_INVOICER);
 
-      const [rawTokenURI, rawInvoiceById] = await Promise.all([
-        InvoicerContract.tokenURI(params![0]).call(),
-        InvoicerContract.getInvoiceById(params![0]).call(),
-      ]);
-
-      cooking(rawInvoiceById, tronWeb);
-
-      const tokenURI = rawTokenURI.replace(
-        "ipfs://",
-        "https://nftstorage.link/ipfs/"
-      );
-
       try {
-        const metadataResponse = await fetch(tokenURI);
-        const metadata = await metadataResponse.json();
+        const [rawTokenURI, rawInvoiceById] = await Promise.all([
+          InvoicerContract.tokenURI(params![0]).call(),
+          InvoicerContract.getInvoiceById(params![0]).call(),
+        ]);
 
-        const image = metadata.image.replace(
+        cooking(rawInvoiceById, tronWeb);
+
+        const tokenURI = rawTokenURI.replace(
           "ipfs://",
           "https://nftstorage.link/ipfs/"
         );
 
-        setInvoiceImage(image);
+        try {
+          const metadataResponse = await fetch(tokenURI);
+          const metadata = await metadataResponse.json();
+
+          const image = metadata.image.replace(
+            "ipfs://",
+            "https://nftstorage.link/ipfs/"
+          );
+
+          setInvoiceImage(image);
+        } catch (e) {
+          setError(true);
+        }
       } catch (e) {
+        toast.error("The invoice does not exists", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+        setWorking(false);
         setError(true);
       }
     },
@@ -477,6 +493,19 @@ const Invoice: NextPage = () => {
                               >
                                 Pay Invoice
                               </button>
+                            </div>
+                          </div>
+                        )}
+                      {invoiceInfo &&
+                        invoiceInfo.listed &&
+                        !done &&
+                        address === invoiceInfo.seller && (
+                          <div className="flex justify-center">
+                            <div className="text-center">
+                              <p className="mb-2">QR to pay</p>
+                              <QRCode
+                                value={`${process.env.NEXT_PUBLIC_ABSOLUTE_URL}${invoiceInfo.invoiceId}`}
+                              />
                             </div>
                           </div>
                         )}
