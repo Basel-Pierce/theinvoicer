@@ -504,7 +504,7 @@ const Invoice: NextPage = () => {
                             <div className="text-center">
                               <p className="mb-2">QR to pay</p>
                               <QRCode
-                                value={`${process.env.NEXT_PUBLIC_ABSOLUTE_URL}${invoiceInfo.invoiceId}`}
+                                value={`${process.env.NEXT_PUBLIC_ABSOLUTE_URL}/invoice/${invoiceInfo.invoiceId}`}
                               />
                             </div>
                           </div>
