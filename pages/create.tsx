@@ -8,6 +8,7 @@ import { Web3Storage, File } from "web3.storage";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import QRCode from "react-qr-code";
 import { toast } from "react-toastify";
+import { PlusCircleIcon } from "@heroicons/react/20/solid";
 import { useTronlink } from "../hooks";
 import Sidebar from "../components/sidebar";
 import Top from "../components/top";
@@ -20,9 +21,6 @@ import EditableCalendarInput from "../components/editableCalendarInput";
 import EditableFileImage from "../components/editableFileImage";
 import countryList from "../data/countryList";
 import stableList from "../data/stableList";
-import Document from "../components/document";
-import Page from "../components/page";
-import View from "../components/view";
 import Text from "../components/text";
 import Spinner from "../components/spinner";
 import ActionPanel from "../components/actionPanel";
@@ -271,7 +269,7 @@ const Create: FC<Props> = ({ data, onChange }) => {
     if (!generating) {
       setGenerating(true);
       setDisabled(true);
-      takeScreenshot(ref.current).then(upload);
+      stakeScreenshot(ref.current).then(upload);
     }
   };
 
@@ -409,15 +407,8 @@ const Create: FC<Props> = ({ data, onChange }) => {
 
           <main className="flex-1">
             <div className="py-6">
-              {/* <div className="px-4 sm:px-6 md:px-0">
-                <h1 className="text-2xl font-semifont-bold text-gray-900">
-                  Preview
-                </h1>
-              </div> */}
               {isConnected && !done && (
                 <div className="px-4 sm:px-6 md:px-0">
-                  {/* Replace with your content */}
-
                   <div className="py-4 relative">
                     {generating && (
                       <div className="absolute top-0 w-full h-full z-50 bg-white/90">
@@ -433,402 +424,403 @@ const Create: FC<Props> = ({ data, onChange }) => {
                     )}
 
                     <div ref={ref}>
-                      <Document>
-                        <Page className="relative bg-white border border-grey-100 sm:rounded-lg p-6">
-                          <View className="flex">
-                            <View className="w-1/2">
-                              <EditableFileImage
-                                className="logo"
-                                placeholder="Your Logo"
-                                value={invoice.logo}
-                                width={invoice.logoWidth}
-                                onChangeImage={(value) =>
-                                  handleChange("logo", value)
-                                }
-                                onChangeWidth={(value) =>
-                                  handleChange("logoWidth", value)
+                      <div>
+                        <div className="sm:flex sm:items-center">
+                          <div className="sm:flex-auto">
+                            <EditableFileImage
+                              className="ml-3"
+                              placeholder="Your Logo"
+                              value={invoice.logo}
+                              width={invoice.logoWidth}
+                              onChangeImage={(value) =>
+                                handleChange("logo", value)
+                              }
+                              onChangeWidth={(value) =>
+                                handleChange("logoWidth", value)
+                              }
+                            />
+                            <EditableInput
+                              className="text-xl font-semibold text-gray-900"
+                              placeholder="Your Company"
+                              value={invoice.companyName}
+                              onChange={(value) =>
+                                handleChange("companyName", value)
+                              }
+                              autoFocus={true}
+                            />
+                            <EditableInput
+                              className="text-sm text-gray-700"
+                              placeholder="Your Name"
+                              value={invoice.name}
+                              onChange={(value) => handleChange("name", value)}
+                            />
+                            <EditableInput
+                              className="text-sm text-gray-700"
+                              placeholder="Company's Address"
+                              value={invoice.companyAddress}
+                              onChange={(value) =>
+                                handleChange("companyAddress", value)
+                              }
+                            />
+                            <EditableInput
+                              className="text-sm text-gray-700"
+                              placeholder="City, State Zip"
+                              value={invoice.companyAddress2}
+                              onChange={(value) =>
+                                handleChange("companyAddress2", value)
+                              }
+                            />
+                          </div>
+                        </div>
+                        <div className="md:grid md:grid-cols-2 gap-2">
+                          <div>
+                            <EditableInput
+                              className="font-bold"
+                              value={invoice.billTo}
+                              onChange={(value) =>
+                                handleChange("billTo", value)
+                              }
+                            />
+                            <EditableInput
+                              className="text-sm text-gray-700"
+                              placeholder="Your Client's Name"
+                              value={invoice.clientName}
+                              onChange={(value) =>
+                                handleChange("clientName", value)
+                              }
+                            />
+                            <EditableInput
+                              className="text-sm text-gray-700"
+                              placeholder="Client's Address"
+                              value={invoice.clientAddress}
+                              onChange={(value) =>
+                                handleChange("clientAddress", value)
+                              }
+                            />
+                            <EditableInput
+                              className="text-sm text-gray-700"
+                              placeholder="City, State Zip"
+                              value={invoice.clientAddress2}
+                              onChange={(value) =>
+                                handleChange("clientAddress2", value)
+                              }
+                            />
+                          </div>
+                          <div className="">
+                            <div className="grid grid-cols-2 items-start gap-2">
+                              <EditableInput
+                                className="block text-sm font-bold text-gray-700 mt-px pt-2"
+                                value={invoice.invoiceTitleLabel}
+                                onChange={(value) =>
+                                  handleChange("invoiceTitleLabel", value)
                                 }
                               />
                               <EditableInput
-                                className="text-xl font-bold"
-                                placeholder="Your Company"
-                                value={invoice.companyName}
+                                placeholder="INV-1"
+                                value={invoice.invoiceTitle}
                                 onChange={(value) =>
-                                  handleChange("companyName", value)
+                                  handleChange("invoiceTitle", value)
                                 }
-                                autoFocus={true}
                               />
+                            </div>
+                            <div className="grid grid-cols-2 items-start gap-2">
                               <EditableInput
-                                placeholder="Your Name"
-                                value={invoice.name}
+                                className="block text-sm font-bold text-gray-700 mt-px pt-2"
+                                value={invoice.invoiceDateLabel}
                                 onChange={(value) =>
-                                  handleChange("name", value)
+                                  handleChange("invoiceDateLabel", value)
                                 }
                               />
-                              <EditableInput
-                                placeholder="Company's Address"
-                                value={invoice.companyAddress}
-                                onChange={(value) =>
-                                  handleChange("companyAddress", value)
-                                }
-                              />
-                              <EditableInput
-                                placeholder="City, State Zip"
-                                value={invoice.companyAddress2}
-                                onChange={(value) =>
-                                  handleChange("companyAddress2", value)
-                                }
-                              />
-                              <EditableSelect
-                                options={countryList}
-                                value={invoice.companyCountry}
-                                onChange={(value) =>
-                                  handleChange("companyCountry", value)
-                                }
-                              />
-                            </View>
-                            <View className="w-1/2">
-                              <EditableInput
-                                className="text-3xl right font-bold"
-                                placeholder="Invoice"
-                                value={invoice.title}
-                                onChange={(value) =>
-                                  handleChange("title", value)
-                                }
-                              />
-                            </View>
-                          </View>
-
-                          <View className="flex mt-40">
-                            <View className="w-1/2">
-                              <EditableInput
-                                className="font-bold mb-5"
-                                value={invoice.billTo}
-                                onChange={(value) =>
-                                  handleChange("billTo", value)
-                                }
-                              />
-                              <EditableInput
-                                placeholder="Your Client's Name"
-                                value={invoice.clientName}
-                                onChange={(value) =>
-                                  handleChange("clientName", value)
-                                }
-                              />
-                              <EditableInput
-                                placeholder="Client's Address"
-                                value={invoice.clientAddress}
-                                onChange={(value) =>
-                                  handleChange("clientAddress", value)
-                                }
-                              />
-                              <EditableInput
-                                placeholder="City, State Zip"
-                                value={invoice.clientAddress2}
-                                onChange={(value) =>
-                                  handleChange("clientAddress2", value)
-                                }
-                              />
-                              <EditableSelect
-                                options={countryList}
-                                value={invoice.clientCountry}
-                                onChange={(value) =>
-                                  handleChange("clientCountry", value)
-                                }
-                              />
-                            </View>
-                            <View className="w-1/2">
-                              <View className="flex mb-5">
-                                <View className="w-2/5">
-                                  <EditableInput
-                                    className="font-bold"
-                                    value={invoice.invoiceTitleLabel}
-                                    onChange={(value) =>
-                                      handleChange("invoiceTitleLabel", value)
-                                    }
-                                  />
-                                </View>
-                                <View className="w-3/5">
-                                  <EditableInput
-                                    placeholder="INV-1"
-                                    value={invoice.invoiceTitle}
-                                    onChange={(value) =>
-                                      handleChange("invoiceTitle", value)
-                                    }
-                                  />
-                                </View>
-                              </View>
-                              <View className="flex mb-5">
-                                <View className="w-2/5">
-                                  <EditableInput
-                                    className="font-bold"
-                                    value={invoice.invoiceDateLabel}
-                                    onChange={(value) =>
-                                      handleChange("invoiceDateLabel", value)
-                                    }
-                                  />
-                                </View>
-                                <View className="w-3/5">
-                                  <EditableCalendarInput
-                                    value={format(invoiceDate, dateFormat)}
-                                    selected={invoiceDate}
-                                    onChange={(date) =>
-                                      handleChange(
-                                        "invoiceDate",
-                                        date && !Array.isArray(date)
-                                          ? format(date, dateFormat)
-                                          : ""
-                                      )
-                                    }
-                                  />
-                                </View>
-                              </View>
-                              <View className="flex mb-5">
-                                <View className="w-2/5">
-                                  <EditableInput
-                                    className="font-bold"
-                                    value={invoice.invoiceDueDateLabel}
-                                    onChange={(value) =>
-                                      handleChange("invoiceDueDateLabel", value)
-                                    }
-                                  />
-                                </View>
-                                <View className="w-3/5">
-                                  <EditableCalendarInput
-                                    value={format(invoiceDueDate, dateFormat)}
-                                    selected={invoiceDueDate}
-                                    onChange={(date) =>
-                                      handleChange(
-                                        "invoiceDueDate",
-                                        date && !Array.isArray(date)
-                                          ? format(date, dateFormat)
-                                          : ""
-                                      )
-                                    }
-                                  />
-                                </View>
-                              </View>
-                            </View>
-                          </View>
-
-                          <View className="mt-30 bg-gray-600 flex">
-                            <View className="w-1/2 p-4-8">
-                              <EditableInput
-                                className="text-white text-sm font-bold bg-transparent"
-                                value={invoice.productLineDescription}
-                                onChange={(value) =>
-                                  handleChange("productLineDescription", value)
-                                }
-                              />
-                            </View>
-                            <View className="w-2/12 p-4-8">
-                              <EditableInput
-                                className="text-white text-sm font-bold bg-transparent right"
-                                value={invoice.productLineQuantity}
-                                onChange={(value) =>
-                                  handleChange("productLineQuantity", value)
-                                }
-                              />
-                            </View>
-                            <View className="w-2/12 p-4-8">
-                              <EditableInput
-                                className="text-white text-sm font-bold bg-transparent right"
-                                value={invoice.productLineQuantityRate}
-                                onChange={(value) =>
-                                  handleChange("productLineQuantityRate", value)
-                                }
-                              />
-                            </View>
-                            <View className="w-2/12 p-4-8">
-                              <EditableInput
-                                className="text-white text-sm font-bold bg-transparent right"
-                                value={invoice.productLineQuantityAmount}
-                                onChange={(value) =>
+                              <EditableCalendarInput
+                                value={format(invoiceDate, dateFormat)}
+                                selected={invoiceDate}
+                                onChange={(date) =>
                                   handleChange(
-                                    "productLineQuantityAmount",
-                                    value
+                                    "invoiceDate",
+                                    date && !Array.isArray(date)
+                                      ? format(date, dateFormat)
+                                      : ""
                                   )
                                 }
                               />
-                            </View>
-                          </View>
-
-                          {invoice.productLines.map((productLine, i) => {
-                            return (
-                              <View
-                                key={i}
-                                className="relative border-b border-gray-100 flex row"
-                              >
-                                <View className="w-1/2 p-4-8 pb-10">
-                                  <EditableTextarea
-                                    className="text-gray-600 text-sm"
-                                    rows={2}
-                                    placeholder="Enter item name/description"
-                                    value={productLine.description}
+                            </div>
+                            <div className="grid grid-cols-2 items-start gap-2">
+                              <EditableInput
+                                className="block text-sm font-bold text-gray-700 mt-px pt-2"
+                                value={invoice.invoiceDueDateLabel}
+                                onChange={(value) =>
+                                  handleChange("invoiceDueDateLabel", value)
+                                }
+                              />
+                              <EditableCalendarInput
+                                value={format(invoiceDueDate, dateFormat)}
+                                selected={invoiceDueDate}
+                                onChange={(date) =>
+                                  handleChange(
+                                    "invoiceDueDate",
+                                    date && !Array.isArray(date)
+                                      ? format(date, dateFormat)
+                                      : ""
+                                  )
+                                }
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="mt-8 overflow-hidden shadow ring-1 ring-black ring-opacity-5  md:rounded-lg">
+                          <table className="min-w-full">
+                            <thead className="bg-gray-400">
+                              <tr>
+                                <th
+                                  scope="col"
+                                  className="text-left text-sm font-semibold text-gray-900"
+                                >
+                                  <EditableInput
+                                    className="bg-transparent"
+                                    value={invoice.productLineDescription}
                                     onChange={(value) =>
-                                      handleProductLineChange(
-                                        i,
-                                        "description",
+                                      handleChange(
+                                        "productLineDescription",
                                         value
                                       )
                                     }
                                   />
-                                </View>
-                                <View className="w-2/12 p-4-8 pb-10">
+                                </th>
+                                <th
+                                  scope="col"
+                                  className="hidden text-left text-sm font-semibold text-gray-900 lg:table-cell"
+                                >
                                   <EditableInput
-                                    className="text-gray-600 text-sm right"
-                                    value={productLine.quantity}
+                                    className="bg-transparent"
+                                    value={invoice.productLineQuantity}
                                     onChange={(value) =>
-                                      handleProductLineChange(
-                                        i,
-                                        "quantity",
+                                      handleChange("productLineQuantity", value)
+                                    }
+                                  />
+                                </th>
+                                <th
+                                  scope="col"
+                                  className="hidden text-left text-sm font-semibold text-gray-900 sm:table-cell"
+                                >
+                                  <EditableInput
+                                    className="bg-transparent"
+                                    value={invoice.productLineQuantityRate}
+                                    onChange={(value) =>
+                                      handleChange(
+                                        "productLineQuantityRate",
                                         value
                                       )
                                     }
                                   />
-                                </View>
-                                <View className="w-2/12 p-4-8 pb-10">
+                                </th>
+                                <th
+                                  scope="col"
+                                  className="text-left text-sm font-semibold text-gray-900"
+                                >
                                   <EditableInput
-                                    className="text-gray-600 text-sm right"
-                                    value={productLine.rate}
+                                    className="bg-transparent"
+                                    value={invoice.productLineQuantityAmount}
                                     onChange={(value) =>
-                                      handleProductLineChange(i, "rate", value)
+                                      handleChange(
+                                        "productLineQuantityAmount",
+                                        value
+                                      )
                                     }
                                   />
-                                </View>
-                                <View className="w-2/12 p-4-8 pb-10">
-                                  <Text className="text-gray-600 text-sm right">
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-200 bg-white">
+                              {invoice.productLines.map((productLine, i) => (
+                                <tr key={i}>
+                                  <td className="w-full max-w-0 text-sm font-medium text-gray-900 sm:w-auto sm:max-w-none">
+                                    <EditableTextarea
+                                      rows={2}
+                                      placeholder="Enter item name/description"
+                                      value={productLine.description}
+                                      onChange={(value) =>
+                                        handleProductLineChange(
+                                          i,
+                                          "description",
+                                          value
+                                        )
+                                      }
+                                    />
+                                    <dl className="font-normal lg:hidden">
+                                      <dt className="font-bold">
+                                        <EditableInput
+                                          value={invoice.productLineQuantity}
+                                          onChange={(value) =>
+                                            handleChange(
+                                              "productLineQuantity",
+                                              value
+                                            )
+                                          }
+                                        />
+                                      </dt>
+                                      <dd className="truncate text-gray-700">
+                                        <EditableInput
+                                          value={productLine.quantity}
+                                          onChange={(value) =>
+                                            handleProductLineChange(
+                                              i,
+                                              "quantity",
+                                              value
+                                            )
+                                          }
+                                        />
+                                      </dd>
+                                      <dt className="sm:hidden font-bold">
+                                        <EditableInput
+                                          value={
+                                            invoice.productLineQuantityRate
+                                          }
+                                          onChange={(value) =>
+                                            handleChange(
+                                              "productLineQuantityRate",
+                                              value
+                                            )
+                                          }
+                                        />
+                                      </dt>
+                                      <dd className="truncate text-gray-500 sm:hidden">
+                                        <EditableInput
+                                          value={productLine.rate}
+                                          onChange={(value) =>
+                                            handleProductLineChange(
+                                              i,
+                                              "rate",
+                                              value
+                                            )
+                                          }
+                                        />
+                                      </dd>
+                                    </dl>
+                                  </td>
+                                  <td className="hidden text-sm text-gray-500 lg:table-cell">
+                                    <EditableInput
+                                      value={productLine.quantity}
+                                      onChange={(value) =>
+                                        handleProductLineChange(
+                                          i,
+                                          "quantity",
+                                          value
+                                        )
+                                      }
+                                    />
+                                  </td>
+                                  <td className="hidden text-sm text-gray-500 sm:table-cell">
+                                    <EditableInput
+                                      value={productLine.rate}
+                                      onChange={(value) =>
+                                        handleProductLineChange(
+                                          i,
+                                          "rate",
+                                          value
+                                        )
+                                      }
+                                    />
+                                  </td>
+                                  <td className="text-sm text-gray-500 pl-3">
                                     {calculateAmount(
                                       productLine.quantity,
                                       productLine.rate
                                     )}
-                                  </Text>
-                                </View>
-                                <button
-                                  className="link row__remove"
-                                  aria-label="Remove Row"
-                                  title="Remove Row"
-                                  onClick={() => handleRemove(i)}
-                                >
-                                  <span className="icon icon-remove bg-red-500"></span>
-                                </button>
-                              </View>
-                            );
-                          })}
+                                  </td>
+                                </tr>
+                              ))}
+                              <tr>
+                                <td colSpan={4}>
+                                  <button
+                                    onClick={handleAdd}
+                                    type="button"
+                                    className="mt-2 ml-2 inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2"
+                                  >
+                                    <PlusCircleIcon
+                                      className="-ml-0.5 mr-2 h-4 w-4 text-green-600"
+                                      aria-hidden="true"
+                                    />
+                                    Add Item
+                                  </button>
+                                </td>
+                              </tr>
+                            </tbody>
+                            <tfoot>
+                              <tr>
+                                <td colSpan={4}>
+                                  <div className="flex flex-row-reverse">
+                                    <div className="xl:w-1/2 w-full mt-20">
+                                      <div className="flex items-center pr-4">
+                                        <div>
+                                          <EditableInput
+                                            value={invoice.subTotalLabel}
+                                            onChange={(value) =>
+                                              handleChange(
+                                                "subTotalLabel",
+                                                value
+                                              )
+                                            }
+                                          />
+                                        </div>
+                                        <div className="w-full">
+                                          <p className="leading-7 text-sm font-bold text-gray-600 sm:text-right">
+                                            {subTotal?.toFixed(2)}
+                                          </p>
+                                        </div>
+                                      </div>
+                                      <div className="flex items-center pr-4">
+                                        <div>
+                                          <EditableInput
+                                            value={invoice.taxLabel}
+                                            onChange={(value) =>
+                                              handleChange("taxLabel", value)
+                                            }
+                                          />
+                                        </div>
+                                        <div className="w-full">
+                                          <div className="leading-7 text-sm font-bold text-gray-600 sm:text-right">
+                                            {saleTax?.toFixed(2)}
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div className="bg-gray-100 flex items-center pr-4">
+                                        <div className="flex">
+                                          <EditableInput
+                                            className="bg-transparent font-bold w-20"
+                                            value={invoice.totalLabel}
+                                            onChange={(value) =>
+                                              handleChange("totalLabel", value)
+                                            }
+                                          />
 
-                          <View className="flex">
-                            <View className="w-1/2 mt-10">
-                              <button
-                                className="link text-sm"
-                                onClick={handleAdd}
-                              >
-                                <span className="icon icon-add bg-green-500 mr-10"></span>
-                                Add Item
-                              </button>
-                            </View>
-                            <View className="w-1/2 mt-20">
-                              <View className="flex">
-                                <View className="w-1/2 p-5">
-                                  <EditableInput
-                                    className="text-sm"
-                                    value={invoice.subTotalLabel}
-                                    onChange={(value) =>
-                                      handleChange("subTotalLabel", value)
-                                    }
-                                  />
-                                </View>
-                                <View className="w-1/2 p-5">
-                                  <Text className="right text-sm font-bold text-gray-600">
-                                    {subTotal?.toFixed(2)}
-                                  </Text>
-                                </View>
-                              </View>
-                              <View className="flex">
-                                <View className="w-1/2 p-5">
-                                  <EditableInput
-                                    className="text-sm"
-                                    value={invoice.taxLabel}
-                                    onChange={(value) =>
-                                      handleChange("taxLabel", value)
-                                    }
-                                  />
-                                </View>
-                                <View className="w-1/2 p-5">
-                                  <Text className="right text-sm font-bold text-gray-600">
-                                    {saleTax?.toFixed(2)}
-                                  </Text>
-                                </View>
-                              </View>
-                              <View className="flex bg-gray-100 p-5">
-                                <View className="w-1/2 p-5">
-                                  <EditableInput
-                                    className="bg-transparent font-bold text-sm"
-                                    value={invoice.totalLabel}
-                                    onChange={(value) =>
-                                      handleChange("totalLabel", value)
-                                    }
-                                  />
-                                </View>
-                                <View className="w-1/2 p-5 flex">
-                                  {/* <EditableInput
-                                    className="text-gray-600 bg-transparent text-sm font-bold right ml-30"
-                                    value={invoice.currency}
-                                    onChange={(value) =>
-                                      handleChange("currency", value)
-                                    }
-                                  /> */}
-                                  <EditableSelect
-                                    className="text-gray-600 bg-transparent text-sm font-bold ml-30"
-                                    options={stableList}
-                                    value={invoice.currency}
-                                    onChange={(value) =>
-                                      handleChange("currency", value)
-                                    }
-                                  />
-                                  <Text className="right font-bold text-sm text-gray-600 w-auto">
-                                    {(typeof subTotal !== "undefined" &&
-                                    typeof saleTax !== "undefined"
-                                      ? subTotal + saleTax
-                                      : 0
-                                    ).toFixed(2)}
-                                  </Text>
-                                </View>
-                              </View>
-                            </View>
-                          </View>
+                                          <EditableSelect
+                                            className="bg-transparent w-24"
+                                            options={stableList}
+                                            value={invoice.currency}
+                                            onChange={(value) =>
+                                              handleChange("currency", value)
+                                            }
+                                          />
+                                        </div>
 
-                          {/* <View className="mt-20">
-                          <EditableInput
-                            className="font-bold w-full"
-                            value={invoice.notesLabel}
-                            onChange={(value) =>
-                              handleChange("notesLabel", value)
-                            }
-                          />
-                          <EditableTextarea
-                            className="w-full"
-                            rows={2}
-                            value={invoice.notes}
-                            onChange={(value) => handleChange("notes", value)}
-                          />
-                        </View>
-                        <View className="mt-20">
-                          <EditableInput
-                            className="font-bold w-full"
-                            value={invoice.termLabel}
-                            onChange={(value) =>
-                              handleChange("termLabel", value)
-                            }
-                          />
-                          <EditableTextarea
-                            className="w-full"
-                            rows={2}
-                            value={invoice.term}
-                            onChange={(value) => handleChange("term", value)}
-                          />
-                        </View> */}
-                        </Page>
-                      </Document>
+                                        <div className="w-full">
+                                          <div className="leading-7 font-bold text-sm text-gray-600 sm:text-right">
+                                            {(typeof subTotal !== "undefined" &&
+                                            typeof saleTax !== "undefined"
+                                              ? subTotal + saleTax
+                                              : 0
+                                            ).toFixed(2)}
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </td>
+                              </tr>
+                            </tfoot>
+                          </table>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
@@ -845,7 +837,6 @@ const Create: FC<Props> = ({ data, onChange }) => {
 
                   {/* <img src={image} />
                   <img src={watermarkImage} /> */}
-                  {/* /End replace */}
                 </div>
               )}
 
@@ -891,7 +882,7 @@ const Create: FC<Props> = ({ data, onChange }) => {
                       <div className="mt-3 text-sm">
                         <Link href={link}>
                           <a className="font-medium text-indigo-600 hover:text-indigo-500">
-                            View the Invoice
+                            div the Invoice
                             <span aria-hidden="true"> &rarr;</span>
                           </a>
                         </Link>

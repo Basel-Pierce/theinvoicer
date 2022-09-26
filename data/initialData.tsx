@@ -8,8 +8,8 @@ export const initialProductLine: ProductLine = {
 
 export const initialInvoice: Invoice = {
   logo: "",
-  logoWidth: 100,
-  title: "INVOICE",
+  logoWidth: 128,
+  title: "Invoice",
   companyName: "",
   name: "",
   companyAddress: "",

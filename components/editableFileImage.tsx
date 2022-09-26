@@ -24,10 +24,8 @@ const EditableFileImage: FC<Props> = ({
   const widthWrapper = useRef<HTMLDivElement>(null);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const marks = {
-    100: "100px",
-    150: "150px",
-    200: "200px",
-    250: "250px",
+    128: "128px",
+    256: "256px",
   };
 
   const handleClickOutside = () => {
@@ -79,48 +77,48 @@ const EditableFileImage: FC<Props> = ({
   return (
     <div className={`image mb-5 text-sm ${className ? className : ""}`}>
       {!value ? (
-        <button type="button" className="image__upload" onClick={handleUpload}>
+        <button
+          type="button"
+          className="cursor-pointer border-dashed border border-gray-400 w-32 h-8 uppercase text-gray-400"
+          onClick={handleUpload}
+        >
           {placeholder}
         </button>
       ) : (
-        <>
+        <div className="relative" style={{ maxWidth: width || 128 }}>
           <img
             src={value}
-            className="image__img"
             alt={placeholder}
-            style={{ maxWidth: width || 100 }}
+            style={{ maxWidth: width || 128 }}
+            className="block"
           />
-
           <button
             type="button"
-            className="image__change"
+            className="cursor-pointer border-dashed border border-gray-400 absolute w-full h-full bg-white top-0 left-0 opacity-0 hover:opacity-95 uppercase text-gray-400"
             onClick={handleUpload}
           >
             Change Image
           </button>
-
           <button type="button" className="image__edit" onClick={handleEdit}>
             Resize Image
           </button>
-
           <button type="button" className="image__remove" onClick={clearImage}>
             Remove
           </button>
-
           {isEditing && (
             <div ref={widthWrapper} className="image__width-wrapper">
               <Slider
-                min={100}
-                max={250}
+                min={128}
+                max={256}
                 marks={marks}
                 included={false}
                 step={1}
                 onChange={handleChangeWidth}
-                defaultValue={width || 100}
+                defaultValue={width || 128}
               />
             </div>
           )}
-        </>
+        </div>
       )}
 
       <input
@@ -128,7 +126,7 @@ const EditableFileImage: FC<Props> = ({
         tabIndex={-1}
         type="file"
         accept="image/*"
-        className="image__file"
+        className="absolute w-px h-px p-0 -m-px overflow-hidden border-0"
         onChange={handleChangeImage}
       />
     </div>
