@@ -269,7 +269,7 @@ const Create: FC<Props> = ({ data, onChange }) => {
     if (!generating) {
       setGenerating(true);
       setDisabled(true);
-      stakeScreenshot(ref.current).then(upload);
+      takeScreenshot(ref.current).then(upload);
     }
   };
 
