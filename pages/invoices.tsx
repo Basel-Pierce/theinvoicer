@@ -115,7 +115,7 @@ const Invoices: NextPage = () => {
           <main className="flex-1">
             {isConnected && (
               <>
-                <div className="py-6">
+                <div className="py-6 px-3">
                   <div className="sm:flex sm:items-center">
                     <div className="sm:flex-auto">
                       <h1 className="text-xl font-semibold text-gray-900">
@@ -220,21 +220,7 @@ const Invoices: NextPage = () => {
                   </div>
                 </div>
 
-                <div className="relative">
-                  <div
-                    className="absolute inset-0 flex items-center"
-                    aria-hidden="true"
-                  >
-                    <div className="w-full border-t border-gray-300" />
-                  </div>
-                  <div className="relative flex justify-center">
-                    <span className="bg-white px-2 text-sm text-gray-500">
-                      -
-                    </span>
-                  </div>
-                </div>
-
-                <div className="py-6">
+                <div className="py-6 px-3">
                   <div className="sm:flex sm:items-center">
                     <div className="sm:flex-auto">
                       <h1 className="text-xl font-semibold text-gray-900">

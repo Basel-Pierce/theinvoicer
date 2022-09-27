@@ -336,7 +336,7 @@ const Invoice: NextPage = () => {
           />
 
           <main className="flex-1">
-            <div className="py-6">
+            <div className="py-6 px-3">
               {isConnected &&
                 typeof params !== "undefined" &&
                 params.length === 1 && (
