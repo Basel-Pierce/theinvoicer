@@ -21,7 +21,6 @@ import EditableCalendarInput from "../components/editableCalendarInput";
 import EditableFileImage from "../components/editableFileImage";
 import countryList from "../data/countryList";
 import stableList from "../data/stableList";
-import Text from "../components/text";
 import Spinner from "../components/spinner";
 import ActionPanel from "../components/actionPanel";
 import Link from "next/link";
@@ -423,7 +422,7 @@ const Create: FC<Props> = ({ data, onChange }) => {
                       </div>
                     )}
 
-                    <div ref={ref}>
+                    <div ref={ref} className="">
                       <div>
                         <div className="sm:flex sm:items-center">
                           <div className="sm:flex-auto">
@@ -749,7 +748,7 @@ const Create: FC<Props> = ({ data, onChange }) => {
                               <tr>
                                 <td colSpan={4}>
                                   <div className="flex flex-row-reverse">
-                                    <div className="xl:w-1/2 w-full mt-20">
+                                    <div className="xl:w-1/2 w-full">
                                       <div className="flex items-center pr-4">
                                         <div>
                                           <EditableInput
