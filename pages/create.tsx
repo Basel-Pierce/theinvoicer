@@ -881,7 +881,7 @@ const Create: FC<Props> = ({ data, onChange }) => {
                       <div className="mt-3 text-sm">
                         <Link href={link}>
                           <a className="font-medium text-indigo-600 hover:text-indigo-500">
-                            div the Invoice
+                            View the Invoice
                             <span aria-hidden="true"> &rarr;</span>
                           </a>
                         </Link>
