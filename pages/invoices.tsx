@@ -192,6 +192,7 @@ const Invoices: NextPage = () => {
                                       <a
                                         href={`${process.env.NEXT_PUBLIC_EXPLORER_URL}token721/${process.env.NEXT_PUBLIC_INVOICER}/${invoice.invoiceId}`}
                                         target="_blank"
+                                        rel="noreferrer"
                                         className="text-indigo-600 hover:text-indigo-900"
                                       >
                                         {invoice.invoiceId}
@@ -295,6 +296,7 @@ const Invoices: NextPage = () => {
                                       <a
                                         href={`${process.env.NEXT_PUBLIC_EXPLORER_URL}token721/${process.env.NEXT_PUBLIC_INVOICER}/${invoice.invoiceId}`}
                                         target="_blank"
+                                        rel="noreferrer"
                                         className="text-indigo-600 hover:text-indigo-900"
                                       >
                                         {invoice.invoiceId}

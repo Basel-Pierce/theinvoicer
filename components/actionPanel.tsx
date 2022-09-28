@@ -26,6 +26,7 @@ export default function ActionPanel() {
           <a
             href="https://www.tronlink.org/"
             target="_blank"
+            rel="noreferrer"
             className="font-medium text-indigo-600 hover:text-indigo-500"
           >
             Install TronLink
