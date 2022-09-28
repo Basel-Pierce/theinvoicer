@@ -1,4 +1,5 @@
 import React, { FC, useCallback, useEffect, useState } from "react";
+import Head from 'next/head'
 import { useRouter } from "next/router";
 // @ts-ignore
 import dateFormat from "dateformat";
@@ -325,6 +326,13 @@ const Invoice: NextPage = () => {
 
   return (
     <div>
+      <Head>
+        <title>Smart NFT invoicing for everyone</title>
+        <meta
+          name="description"
+          content="Solves two huge problems on two very different fronts using Blockchain: Contractor Payments and Cyber Security"
+        />
+      </Head>
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
       <div className="md:pl-64">
@@ -472,7 +480,7 @@ const Invoice: NextPage = () => {
                         </div>
                       )}
                       {!invoiceImage && !error && (
-                        <div className="flex justify-center items-center">
+                        <div className="flex justify-center items-center mb-6">
                           <Spinner styles="h-6 w-6 text-black" />
                           <p className="text-gray-800 text-base ml-3">
                             Loading Invoice...

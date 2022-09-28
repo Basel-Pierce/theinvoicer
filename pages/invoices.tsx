@@ -5,6 +5,7 @@ import {
   useEffect,
   useState,
 } from "react";
+import Head from 'next/head'
 import type { NextPage } from "next";
 // @ts-ignore
 import dateFormat from "dateformat";
@@ -103,6 +104,13 @@ const Invoices: NextPage = () => {
 
   return (
     <div>
+      <Head>
+        <title>Smart NFT invoicing for everyone</title>
+        <meta
+          name="description"
+          content="Solves two huge problems on two very different fronts using Blockchain: Contractor Payments and Cyber Security"
+        />
+      </Head>
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
       <div className="md:pl-64">
@@ -122,7 +130,7 @@ const Invoices: NextPage = () => {
                         Incoming/Paid
                       </h1>
                       <p className="mt-2 text-sm text-gray-700">
-                        A list of all the invoices paid
+                        All your paid invoices are here
                       </p>
                     </div>
                     <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
@@ -156,7 +164,7 @@ const Invoices: NextPage = () => {
                                 scope="col"
                                 className="py-3.5 px-3 text-left text-sm font-semibold text-gray-900"
                               >
-                                Date of Paid
+                                Date of Payment
                               </th>
                               <th
                                 scope="col"
@@ -205,10 +213,8 @@ const Invoices: NextPage = () => {
                                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 md:pr-0">
                                       <Link
                                         href={`/invoice/${invoice.invoiceId}`}
-                                      >
-                                        <a className="text-indigo-600 hover:text-indigo-900">
+                                        className="text-indigo-600 hover:text-indigo-900">
                                           View Invoice
-                                        </a>
                                       </Link>
                                     </td>
                                   </tr>
@@ -318,10 +324,8 @@ const Invoices: NextPage = () => {
                                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 md:pr-0">
                                       <Link
                                         href={`/invoice/${invoice.invoiceId}`}
-                                      >
-                                        <a className="text-indigo-600 hover:text-indigo-900">
+                                        className="text-indigo-600 hover:text-indigo-900">
                                           View Invoice
-                                        </a>
                                       </Link>
                                     </td>
                                   </tr>

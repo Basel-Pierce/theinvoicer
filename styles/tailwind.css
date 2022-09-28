@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+#__next {
+    min-height: 100%;
+}
+
 .image__edit,
 .image__remove {
     background: #999 no-repeat 50%;

@@ -1,5 +1,6 @@
 import React, { FC, useState, useEffect, useRef } from "react";
 import { useRouter } from "next/router";
+import Head from 'next/head'
 import format from "date-fns/format";
 // @ts-ignore
 import { useScreenshot } from "use-react-screenshot";
@@ -372,6 +373,14 @@ const Create: FC<Props> = ({ data, onChange }) => {
   }, [onChange, invoice]);
 
   return (
+    <>
+    <Head>
+      <title>Smart NFT invoicing for everyone</title>
+      <meta
+        name="description"
+        content="Solves two huge problems on two very different fronts using Blockchain: Contractor Payments and Cyber Security"
+      />
+    </Head>
     <div className="relative">
       {showQR && (
         <div
@@ -879,11 +888,9 @@ const Create: FC<Props> = ({ data, onChange }) => {
                         </p>
                       </div>
                       <div className="mt-3 text-sm">
-                        <Link href={link}>
-                          <a className="font-medium text-indigo-600 hover:text-indigo-500">
+                        <Link href={link} className="font-medium text-indigo-600 hover:text-indigo-500">
                             View the Invoice
                             <span aria-hidden="true"> &rarr;</span>
-                          </a>
                         </Link>
                       </div>
                     </div>
@@ -906,6 +913,7 @@ const Create: FC<Props> = ({ data, onChange }) => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

@@ -1,4 +1,5 @@
-import "../styles/globals.css";
+import 'focus-visible'
+import '../styles/tailwind.css'
 import { ToastContainer } from "react-toastify";
 import type { AppProps } from "next/app";
 

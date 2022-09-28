@@ -4,6 +4,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { navigation } from "../shared/navigation";
 import { classNames } from "../shared/utils";
 import Link from "next/link";
+import { Logo } from "./home/Logo";
 
 export default function Sidebar({
   sidebarOpen,
@@ -67,17 +68,12 @@ export default function Sidebar({
                   </div>
                 </Transition.Child>
                 <div className="flex flex-shrink-0 items-center px-4">
-                  <img
-                    className="h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                    alt="Your Company"
-                  />
+                  <Logo className="h-8 w-auto" />
                 </div>
                 <div className="mt-5 h-0 flex-1 overflow-y-auto">
                   <nav className="space-y-1 px-2">
                     {navigation.map((item) => (
-                      <Link href={item.href} key={item.name}>
-                        <a
+                      <Link href={item.href} key={item.name}
                           className={classNames(
                             item.current
                               ? "bg-gray-100 text-gray-900"
@@ -95,7 +91,6 @@ export default function Sidebar({
                             aria-hidden="true"
                           />
                           {item.name}
-                        </a>
                       </Link>
                     ))}
                   </nav>
@@ -112,20 +107,14 @@ export default function Sidebar({
       {/* Static sidebar for desktop */}
       <div className="hidden md:fixed md:inset-y-0 md:flex md:w-64 md:flex-col">
         {/* Sidebar component, swap this element with another sidebar if you like */}
-        <div className="flex flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-white pt-5">
+        <div className="flex flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-gray-100 pt-5">
           <div className="flex flex-shrink-0 items-center px-4">
-            <img
-              className="h-8 w-auto"
-              src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-              alt="Your Company"
-            />
+            <Logo className="h-8 w-auto" />
           </div>
           <div className="mt-5 flex flex-grow flex-col">
             <nav className="flex-1 space-y-1 px-2 pb-4">
               {navigation.map((item) => (
-                <Link href={item.href} key={item.name}>
-                  <a
-                    className={classNames(
+                <Link href={item.href} key={item.name} className={classNames(
                       item.current
                         ? "bg-gray-100 text-gray-900"
                         : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
@@ -142,7 +131,6 @@ export default function Sidebar({
                       aria-hidden="true"
                     />
                     {item.name}
-                  </a>
                 </Link>
               ))}
             </nav>
