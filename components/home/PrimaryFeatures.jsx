@@ -32,7 +32,7 @@ const features = [
   {
     title: 'Paid',
     description:
-      'Now, the paid invoice is in the client\'s wallet. So that is irrefutable evidence that the invoice has been paid. The funds, are on the contractor\'s wallet.',
+      'Now the paid invoice is an NFT in the client\'s wallet, providing irrefutable evidence that the invoice has been paid and better traceability. The funds, are in the contractor\'s wallet.',
     image: screenshotReporting,
   },
 ]

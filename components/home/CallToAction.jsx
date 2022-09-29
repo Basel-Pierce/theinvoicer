@@ -24,7 +24,7 @@ export function CallToAction() {
             Get started now
           </h2>
           <p className="mt-4 text-lg tracking-tight text-white">
-            We charged a very tiny platform fee (TRX), paid at the time of siging the transaction, seamlessly integrated with the gas
+            There is a very small platform fee (in TRX), paid at the time of signing the transaction, seamlessly integrated with the gas fee.
           </p>
           <Button href="/create" color="white" className="mt-10">
             Open App

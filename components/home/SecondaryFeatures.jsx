@@ -13,7 +13,7 @@ const features = [
     name: 'Contractor Payments',
     summary: '',
     description:
-      'Invoice Tracking gets tricky as there are no "recipts" on the recieving end, and ong there is no easy way to know if an invoice has been paid or not. Traditional payment systems such as Paypal or Payoneer provide this feature, but is lacking on the crypto ecosystem.',
+      'Invoice Tracking gets tricky as there are no "recipts" on the recieving end, and there is no easy way to know if an invoice has been paid or not. Traditional payment systems such as Paypal or Payoneer provide this feature, but is lacking on the crypto ecosystem.',
     image: screenshotProfitLoss,
     icon: function ReportingIcon() {
       let id = useId()
