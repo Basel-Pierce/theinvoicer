@@ -770,7 +770,7 @@ const Create: FC<Props> = ({ data, onChange }) => {
                                             }
                                           />
                                         </div>
-                                        <div className="w-full">
+                                        <div className="">
                                           <p className="leading-7 text-sm font-bold text-gray-600 sm:text-right">
                                             {subTotal?.toFixed(2)}
                                           </p>
@@ -785,7 +785,7 @@ const Create: FC<Props> = ({ data, onChange }) => {
                                             }
                                           />
                                         </div>
-                                        <div className="w-full">
+                                        <div className="">
                                           <div className="leading-7 text-sm font-bold text-gray-600 sm:text-right">
                                             {saleTax?.toFixed(2)}
                                           </div>
@@ -811,7 +811,7 @@ const Create: FC<Props> = ({ data, onChange }) => {
                                           />
                                         </div>
 
-                                        <div className="w-full">
+                                        <div className="">
                                           <div className="leading-7 font-bold text-sm text-gray-600 sm:text-right">
                                             {(typeof subTotal !== "undefined" &&
                                             typeof saleTax !== "undefined"
