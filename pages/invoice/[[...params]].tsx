@@ -202,20 +202,20 @@ const Invoice: NextPage = () => {
         return false;
       }
 
-      // toast.success("You paid the Invoice!", {
-      //   position: "top-right",
-      //   autoClose: 5000,
-      //   hideProgressBar: true,
-      //   closeOnClick: true,
-      //   pauseOnHover: true,
-      //   draggable: true,
-      //   progress: undefined,
-      //   theme: "dark",
-      // });
+      toast.success("You paid the Invoice!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+      });
 
       setWorking(false);
       setDone(true);
-      router.reload();
+      // router.reload();
     } catch (e) {
       console.log(e);
       toast.error("Something wrong happened", {
