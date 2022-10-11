@@ -1,4 +1,5 @@
 import Image from 'next/future/image'
+import Link from 'next/link'
 
 import { Container } from './Container'
 import backgroundImage from './images/background-faqs.jpg'
@@ -6,55 +7,39 @@ import backgroundImage from './images/background-faqs.jpg'
 const faqs = [
   [
     {
-      question: 'Does TaxPal handle VAT?',
+      question: 'How te create a Tron Link wallet extension?',
       answer:
-        'Well no, but if you move your company offshore you can probably ignore it.',
+        'https://youtu.be/Xu-lmkGtzs4',
     },
     {
-      question: 'Can I pay for my subscription via purchase order?',
-      answer: 'Absolutely, we are happy to take your money in all forms.',
+      question: 'How to create an invoice with TronLink extension?',
+      answer: 'https://youtu.be/feMOz2KrmZg',
     },
     {
-      question: 'How do I apply for a job at TaxPal?',
+      question: 'How to pay an invoice?',
       answer:
-        'We only hire our customers, so subscribe for a minimum of 6 months and then let’s talk.',
+        'https://youtu.be/vWCtFfnKw48',
     },
   ],
   [
     {
-      question: 'What was that testimonial about tax fraud all about?',
+      question: 'How to create a Tron Link Wallet in mobile?',
       answer:
-        'TaxPal is just a software application, ultimately your books are your responsibility.',
+        'https://youtu.be/-B-tnUcTuHo',
     },
     {
       question:
-        'TaxPal sounds horrible but why do I still feel compelled to purchase?',
+        'How te create an invoice with a mobile device?',
       answer:
-        'This is the power of excellent visual design. You just can’t resist it, no matter how poorly it actually functions.',
+        'https://youtu.be/qClvvvNfaek',
     },
     {
       question:
-        'I found other companies called TaxPal, are you sure you can use this name?',
+        'How to pay an invoice with a mobile device?',
       answer:
-        'Honestly not sure at all. We haven’t actually incorporated or anything, we just thought it sounded cool and made this website.',
+        'https://youtu.be/dUTgU-Sw6x8',
     },
-  ],
-  [
-    {
-      question: 'How do you generate reports?',
-      answer:
-        'You just tell us what data you need a report for, and we get our kids to create beautiful charts for you using only the finest crayons.',
-    },
-    {
-      question: 'Can we expect more inventory features?',
-      answer: 'In life it’s really better to never expect anything at all.',
-    },
-    {
-      question: 'I lost my password, how do I get into my account?',
-      answer:
-        'Send us an email and we will send you a copy of our latest password spreadsheet so you can find your information.',
-    },
-  ],
+  ]
 ]
 
 export function Faqs() {
@@ -81,13 +66,12 @@ export function Faqs() {
             Frequently asked questions
           </h2>
           <p className="mt-4 text-lg tracking-tight text-slate-700">
-            If you can’t find what you’re looking for, email our support team
-            and if you’re lucky someone will get back to you.
+            If you can’t find what you’re looking for, email our support team.
           </p>
         </div>
         <ul
           role="list"
-          className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 lg:max-w-none lg:grid-cols-3"
+          className="mx-auto mt-16 grid max-w-2xl grid-cols-1 gap-8 lg:max-w-none lg:grid-cols-2"
         >
           {faqs.map((column, columnIndex) => (
             <li key={columnIndex}>
@@ -97,7 +81,7 @@ export function Faqs() {
                     <h3 className="font-display text-lg leading-7 text-slate-900">
                       {faq.question}
                     </h3>
-                    <p className="mt-4 text-sm text-slate-700">{faq.answer}</p>
+                    <p className="mt-4 text-sm text-slate-700"><Link href={faq.answer}>View Video</Link></p>
                   </li>
                 ))}
               </ul>

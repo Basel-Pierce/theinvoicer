@@ -78,6 +78,7 @@ function MobileNavigation() {
             className="absolute inset-x-0 top-full mt-4 flex origin-top flex-col rounded-2xl bg-white p-4 text-lg tracking-tight text-slate-900 shadow-xl ring-1 ring-slate-900/5"
           >
             <MobileNavLink href="#features">Features</MobileNavLink>
+            <MobileNavLink href="#faq">FAQ</MobileNavLink>
             {/* <MobileNavLink href="#testimonials">Testimonials</MobileNavLink>
             <MobileNavLink href="#pricing">Pricing</MobileNavLink> */}
           </Popover.Panel>
@@ -94,12 +95,12 @@ export function Header() {
         <nav className="relative z-50 flex justify-between">
           <div className="flex items-center md:gap-x-12">
             <Link href="#" aria-label="Home">
-              <Logo className="h-10 w-auto" />
+              <Logo className="h-8 w-auto" />
             </Link>
             <div className="hidden md:flex md:gap-x-6">
               <NavLink href="#features">Features</NavLink>
-              {/* <NavLink href="#testimonials">Testimonials</NavLink>
-              <NavLink href="#pricing">Pricing</NavLink> */}
+              <NavLink href="#faq">FAQ</NavLink>
+              {/*<NavLink href="#pricing">Pricing</NavLink> */}
             </div>
           </div>
           <div className="flex items-center gap-x-5 md:gap-x-8">

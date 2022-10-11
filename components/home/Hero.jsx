@@ -29,8 +29,8 @@ export function Hero() {
       </p>
       <div className="mt-10 flex justify-center gap-x-6">
         {/* <Button href="/register">Get 6 months free</Button> */}
-        {/* <Button
-          href="https://www.youtube.com/watch?v="
+                <Button
+          href="https://youtu.be/feMOz2KrmZg"
           variant="outline"
         >
           <svg
@@ -39,8 +39,20 @@ export function Hero() {
           >
             <path d="m9.997 6.91-7.583 3.447A1 1 0 0 1 1 9.447V2.553a1 1 0 0 1 1.414-.91L9.997 5.09c.782.355.782 1.465 0 1.82Z" />
           </svg>
-          <span className="ml-3">Watch video</span>
-        </Button> */}
+          <span className="ml-3">Create Invoice</span>
+        </Button>
+        <Button
+          href="https://youtu.be/vWCtFfnKw48"
+          variant="outline"
+        >
+          <svg
+            aria-hidden="true"
+            className="h-3 w-3 flex-none fill-blue-600 group-active:fill-current"
+          >
+            <path d="m9.997 6.91-7.583 3.447A1 1 0 0 1 1 9.447V2.553a1 1 0 0 1 1.414-.91L9.997 5.09c.782.355.782 1.465 0 1.82Z" />
+          </svg>
+          <span className="ml-3">Pay Invoice</span>
+        </Button>
       </div>
       <div className="mt-36 lg:mt-44">
         <p className="font-display text-base text-slate-900">

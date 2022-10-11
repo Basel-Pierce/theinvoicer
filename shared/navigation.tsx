@@ -16,7 +16,7 @@ export const navigation = [
   },
   {
     name: "FAQ",
-    href: "/faq",
+    href: "/#faq",
     icon: QuestionMarkCircleIcon,
     current: false,
   },
